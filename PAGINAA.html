@@ -3,82 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡Felicidades, has ganado un iPhone!</title>
+    <title>Entrega de Vinos</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f8f9fa;
-            margin: 0;
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
         }
-        .container {
+        h1, h2 {
+            text-align: center;
+            color: #4a4a4a;
+        }
+        .form-container {
             background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            max-width: 400px;
-            width: 100%;
+            margin: 0 auto 20px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
+        .form-container label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: bold;
         }
-        .form-group input {
-            width: 100%;
+        .form-container input, .form-container select, .form-container button {
+            width: calc(100% - 20px);
+            margin: 8px 0;
             padding: 10px;
+            font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .form-group input[type="submit"] {
-            background-color: #007bff;
+        .form-container button {
+            background-color: #4caf50;
             color: white;
-            border: none;
             cursor: pointer;
-            font-size: 16px;
+            border: none;
         }
-        .form-group input[type="submit"]:hover {
-            background-color: #0056b3;
+        .form-container button:hover {
+            background-color: #45a049;
         }
-        .alert {
-            color: red;
-            margin-top: 20px;
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .table-container {
+            margin: 0 auto;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        th {
+            background-color: #4caf50;
+            color: white;
+            font-weight: bold;
+        }
+        td, th {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        td {
+            cursor: pointer;
+        }
+        td:hover {
+            background-color: #f4f4f9;
+        }
+        .table-title {
+            margin-bottom: 10px;
+            color: #4a4a4a;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>¡Felicidades!</h1>
-        <p>Has ganado un iPhone. Para verificar tu identidad y reclamar tu premio, por favor completa la siguiente información:</p>
-        <form action="#" method="post">
-            <div class="form-group">
-                <label for="card-number">Número de tarjeta:</label>
-                <input type="text" id="card-number" name="card-number" required>
-            </div>
-            <div class="form-group">
-                <label for="expiry-date">Fecha de vencimiento (MM/AA):</label>
-                <input type="text" id="expiry-date" name="expiry-date" required>
-            </div>
-            <div class="form-group">
-                <label for="security-code">Código de seguridad:</label>
-                <input type="text" id="security-code" name="security-code" required>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Verificar">
-            </div>
-            <div class="alert">
-                <p>¡No te preocupes! Tu información está segura con nosotros.</p>
-            </div>
-        </form>
+    <h1>Registro de Entrega de Vinos</h1>
+    <div class="form-container">
+        <label for="clientName">Nombre del Cliente:</label>
+        <input type="text" id="clientName" placeholder="Escribe el nombre" required>
+        <label for="wineType">Selecciona un vino:</label>
+        <select id="wineType">
+            <option value="Nicasia">Nicasia</option>
+            <option value="Escorihuela">Escorihuela</option>
+            <option value="NietoSenetiner">Nieto Senetiner</option> <!-- Clave correcta sin espacios -->
+        </select>
+        <button onclick="addClient()">Agregar Cliente</button>
+        <button onclick="resetData()" style="background-color: #e74c3c; margin-top: 10px;">Reiniciar Datos</button>
+        <p id="message" class="error"></p>
     </div>
+
+    <div class="table-container">
+        <h2 class="table-title" id="nicasiaTitle">Clientes - Nicasia (Quedan: 30, Entregados: 0)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody id="nicasiaTable"></tbody>
+        </table>
+
+        <h2 class="table-title" id="escorihuelaTitle">Clientes - Escorihuela (Quedan: 30, Entregados: 0)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody id="escorihuelaTable"></tbody>
+        </table>
+
+        <h2 class="table-title" id="nietoSenetinerTitle">Clientes - Nieto Senetiner (Quedan: 30, Entregados: 0)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody id="nietoSenetinerTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // Inicialización de clientes y stock de vinos
+        let clients = JSON.parse(localStorage.getItem('clients')) || [];
+        const wineInventory = JSON.parse(localStorage.getItem('wineInventory')) || {
+            Nicasia: { total: 30, delivered: 0 },
+            Escorihuela: { total: 30, delivered: 0 },
+            NietoSenetiner: { total: 30, delivered: 0 } // Clave correcta para Nieto Senetiner
+        };
+
+        // Función para cargar la lista de clientes y actualizar las tablas
+        function loadClients() {
+            const nicasiaTable = document.getElementById('nicasiaTable');
+            const escorihuelaTable = document.getElementById('escorihuelaTable');
+            const nietoSenetinerTable = document.getElementById('nietoSenetinerTable');
+
+            // Limpiar las tablas actuales
+            nicasiaTable.innerHTML = "";
+            escorihuelaTable.innerHTML = "";
+            nietoSenetinerTable.innerHTML = "";
+
+            // Mostrar clientes en sus respectivas tablas
+            clients.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td onclick="confirmDelete(${index})">${client.name}</td>
+                `;
+
+                if (client.wine === "Nicasia") {
+                    nicasiaTable.appendChild(row);
+                } else if (client.wine === "Escorihuela") {
+                    escorihuelaTable.appendChild(row);
+                } else if (client.wine === "NietoSenetiner") { // Clave correcta para Nieto Senetiner
+                    nietoSenetinerTable.appendChild(row);
+                }
+            });
+
+            updateTitles();
+        }
+
+        // Función para agregar un nuevo cliente
+        function addClient() {
+            const clientName = document.getElementById('clientName').value.trim();
+            const wineType = document.getElementById('wineType').value;
+            const message = document.getElementById('message');
+
+            if (!clientName) {
+                message.textContent = "Por favor, escribe un nombre válido.";
+                return;
+            }
+
+            if (clients.some(client => client.name === clientName)) {
+                message.textContent = "Error. Este cliente ya le diste vino.";
+                return;
+            }
+
+            // Verificar si quedan vinos disponibles
+            if (wineInventory[wineType].total <= 0) {
+                message.textContent = `No quedan más botellas de ${wineType}.`;
+                return;
+            }
+
+            // Agregar cliente a la lista
+            clients.push({ name: clientName, wine: wineType });
+            wineInventory[wineType].total--; // Restar el vino entregado
+            wineInventory[wineType].delivered++; // Sumar vino entregado
+
+            // Guardar en Local Storage
+            localStorage.setItem('clients', JSON.stringify(clients));
+            localStorage.setItem('wineInventory', JSON.stringify(wineInventory));
+
+            // Limpiar campos y recargar las tablas
+            message.textContent = "";
+            document.getElementById('clientName').value = "";
+            loadClients();
+        }
+
+        // Función para eliminar un cliente de la lista
+        function confirmDelete(index) {
+            const client = clients[index];
+            if (confirm(`¿Estás seguro de que quieres eliminar a ${client.name}?`)) {
+                wineInventory[client.wine].total++; // Incrementar el stock de vinos
+                wineInventory[client.wine].delivered--; // Decrementar el vino entregado
+                clients.splice(index, 1); // Eliminar cliente
+                localStorage.setItem('clients', JSON.stringify(clients));
+                localStorage.setItem('wineInventory', JSON.stringify(wineInventory));
+                loadClients(); // Recargar tablas
+            }
+        }
+
+        // Función para reiniciar todos los datos
+        function resetData() {
+            if (confirm("¿Estás seguro de que quieres reiniciar todos los datos?")) {
+                clients = [];
+                wineInventory.Nicasia = { total: 30, delivered: 0 };
+                wineInventory.Escorihuela = { total: 30, delivered: 0 };
+                wineInventory.NietoSenetiner = { total: 30, delivered: 0 };
+
+                localStorage.setItem('clients', JSON.stringify(clients));
+                localStorage.setItem('wineInventory', JSON.stringify(wineInventory));
+
+                loadClients();
+            }
+        }
+
+        // Función para actualizar los títulos de las tablas
+        function updateTitles() {
+            document.getElementById('nicasiaTitle').textContent = `Clientes - Nicasia (Quedan: ${wineInventory.Nicasia.total}, Entregados: ${wineInventory.Nicasia.delivered})`;
+            document.getElementById('escorihuelaTitle').textContent = `Clientes - Escorihuela (Quedan: ${wineInventory.Escorihuela.total}, Entregados: ${wineInventory.Escorihuela.delivered})`;
+            document.getElementById('nietoSenetinerTitle').textContent = `Clientes - Nieto Senetiner (Quedan: ${wineInventory.NietoSenetiner.total}, Entregados: ${wineInventory.NietoSenetiner.delivered})`;
+        }
+
+        // Cargar los datos al cargar la página
+        window.onload = loadClients;
+    </script>
 </body>
 </html>
